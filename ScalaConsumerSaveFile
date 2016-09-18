@@ -13,7 +13,7 @@ object testScala {
     val params = Map("metadata.broker.list" -> "localhost:9092")
     val topics = Set("testtopic1")
     val messages = KafkaUtils.createDirectStream[String,String, StringDecoder, StringDecoder ](ssc, params, topics)
-    val lines = messages.map(c=> c._2).saveAsTextFiles("/home/edureka/result")
+    val lines = messages.map(c=> c._2).saveAsTextFiles("/home/result")
 
   
     // Start the computation
