@@ -24,7 +24,7 @@ public class KafkaProducerMain {
         props.put("request.required.acks", "1");
  
         KafkaProducer<String, String> producer = new KafkaProducer <String, String>(props);
-        FileInputStream fstream = new FileInputStream("/home/edureka/derby.log");
+        FileInputStream fstream = new FileInputStream("/home/derby.log");
         BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 
         String strLine;
