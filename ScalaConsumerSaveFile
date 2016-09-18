@@ -1,0 +1,23 @@
+import kafka.serializer.StringDecoder
+import org.apache.spark.SparkConf
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.streaming.kafka.KafkaUtils
+import org.apache.spark.scheduler.{LiveListenerBus, SparkListener, SparkListenerEvent}
+import org.apache.spark.util.ListenerBus
+
+object testScala {
+ 
+   def main(args:Array[String]){
+    val conf = new SparkConf().setAppName("Kafka Program").setMaster("local[2]")
+    val ssc = new StreamingContext(conf, Seconds(10))
+    val params = Map("metadata.broker.list" -> "localhost:9092")
+    val topics = Set("testtopic1")
+    val messages = KafkaUtils.createDirectStream[String,String, StringDecoder, StringDecoder ](ssc, params, topics)
+    val lines = messages.map(c=> c._2).saveAsTextFiles("/home/edureka/result")
+
+  
+    // Start the computation
+    ssc.start()
+    ssc.awaitTermination()
+   }
+}
