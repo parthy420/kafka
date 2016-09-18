@@ -1,4 +1,9 @@
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 import kafka.javaapi.producer.Producer;
@@ -9,7 +14,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class KafkaProducerMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
  
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");
@@ -19,12 +24,20 @@ public class KafkaProducerMain {
         props.put("request.required.acks", "1");
  
         KafkaProducer<String, String> producer = new KafkaProducer <String, String>(props);
- 
-        for(int i = 0; i < 10; i++)
-            producer.send(new ProducerRecord<String, String>("testtopic1", 
-               Integer.toString(i), "from eclipse i"));
+        FileInputStream fstream = new FileInputStream("/home/edureka/derby.log");
+        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+
+        String strLine;
+        int i =0;
+        while ((strLine = br.readLine()) != null)   {
+        	producer.send(new ProducerRecord<String, String>("testtopic1", Integer.toString(i), strLine));
+          System.out.println (strLine);
+          i++;
+        }
+        producer.close();
+        br.close();
+     
                   System.out.println("Message sent successfully");
-                  producer.close();
        
     }
 }
